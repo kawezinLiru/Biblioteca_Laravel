@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 use App\Models\Produto;
 use Illuminate\Http\Request;
 
@@ -29,4 +30,37 @@ Route::post('/cadastrar-produto',function(Request $request) {
     ]);
 
     echo "Produto criado com sucesso";
+});
+
+Route::get('/listar-produto/{id}', function($id){
+    //dd(Produto::find($id)); //debug and die
+    $produto = Produto::find($id);
+    return view('listar', ['produto'=> $produto]);
+});
+
+Route::get('/editar-produto/{id}', function($id){
+    //dd(Produto::find($id)); //debug and die
+    $produto = Produto::find($id);
+    return view('editar', ['produto'=> $produto]);
+});
+
+Route::post('/editar-produto/{id}', function(Request $request, $id){
+    //dd($request->all());
+    $produto = Produto::find($id);
+    
+    $produto::create([
+        'nome' => $request->nome,
+        'valor' => $request->valor,
+        'estoque' => $request->estoque
+    ]);
+
+    echo "Produto editado com sucesso";
+});
+
+Route::get('/excluir-produto/{id}',function($id){
+    //dd($request->all());
+    $produto = Produto::find($id);
+    $produto->delete();
+
+    echo "Produto excluido com sucesso!";
 });
